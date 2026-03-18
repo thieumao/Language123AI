@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Language123 (AI English Learning MVP)
 
-## Getting Started
+Next.js (App Router) + TypeScript + Tailwind + Prisma + Postgres.
 
-First, run the development server:
+## What's included
+
+- Admin pages:
+  - `/admin/editor`: paste an article, generate sections (mock AI), edit, then Save Draft / Publish.
+  - `/admin/articles`: list articles and jump to the editor.
+- User pages:
+  - `/learn`: list published articles
+  - `/learn/[id]`: reading, vocabulary, interactive question, and discussion prompts
+- API (thin wrappers over services):
+  - `POST /api/generate`
+  - `POST /api/improve` (also used for "Regenerate")
+  - `POST /api/detect-level`
+  - `POST /api/articles`
+  - `GET /api/articles`
+  - `GET /api/articles/[id]`
+  - `PUT /api/articles/[id]`
+
+AI responses are mocked in `lib/ai.ts` for MVP.
+
+## Prerequisites
+
+- Node.js
+- PostgreSQL (Supabase recommended in your spec)
+
+## Setup
+
+1. Configure database URL
+   - Edit `.env` (or create your own) with `DATABASE_URL`.
+   - Copy from `.env.example`.
+
+2. Create the DB table
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn prisma:db:push
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Generate Prisma client
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn prisma:generate
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Run the dev server
 
-## Learn More
+```bash
+yarn dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Then open:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Admin: `http://localhost:3000/admin/editor`
+- User: `http://localhost:3000/learn`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
