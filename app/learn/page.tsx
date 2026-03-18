@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getArticles } from "@/services/articleService";
 import type { ArticleStatus } from "@/lib/types";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
 
 export default async function LearnIndexPage() {
   let articles: Awaited<ReturnType<typeof getArticles>> = [];
@@ -11,47 +13,66 @@ export default async function LearnIndexPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold">Learn</h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
-          Read and practice AI-generated English lessons.
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="text-3xl font-semibold tracking-tight">Learn</h1>
+          <Badge>Published</Badge>
+        </div>
+        <p className="text-base text-zinc-600 dark:text-zinc-300">
+          Read short lessons, practice vocabulary, and answer questions.
         </p>
       </div>
 
-      <div className="rounded-xl border bg-white p-4 dark:bg-zinc-950">
-        {articles.length === 0 ? (
-          <p className="text-sm text-zinc-600 dark:text-zinc-300">
-            No published articles yet. Ask an admin to publish one.
-          </p>
-        ) : (
-          <ul className="space-y-3">
-            {articles.map((a) => (
-              <li
-                key={a.id}
-                className="flex items-start justify-between gap-3 rounded-lg border p-3"
-              >
-                <div className="min-w-0">
+      <Card>
+        <CardHeader>
+          <div className="space-y-1">
+            <CardTitle>Lessons</CardTitle>
+            <CardDescription>
+              Click an article to start learning.
+            </CardDescription>
+          </div>
+          <div className="text-sm text-zinc-500 dark:text-zinc-400">
+            {articles.length} total
+          </div>
+        </CardHeader>
+        <CardContent>
+          {articles.length === 0 ? (
+            <div className="rounded-xl border border-dashed p-6 text-sm text-zinc-600 dark:text-zinc-300">
+              No published articles yet. Ask an admin to publish one.
+            </div>
+          ) : (
+            <ul className="space-y-3">
+              {articles.map((a) => (
+                <li key={a.id}>
                   <Link
                     href={`/learn/${a.id}`}
-                    className="block truncate font-medium hover:underline"
+                    className="group block rounded-2xl border border-zinc-200/70 bg-white p-4 shadow-sm shadow-zinc-900/5 transition hover:-translate-y-0.5 hover:bg-zinc-50/60 hover:shadow-md hover:shadow-zinc-900/10 dark:border-zinc-800/80 dark:bg-zinc-950 dark:shadow-zinc-950/30 dark:hover:bg-zinc-900/30"
                   >
-                    {a.title}
-                  </Link>
-                  {a.level ? (
-                    <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
-                      Level: {a.level}
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <div className="truncate text-base font-semibold tracking-tight">
+                          {a.title}
+                        </div>
+                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                          {a.level ? (
+                            <Badge className="bg-zinc-50 text-zinc-700 dark:bg-zinc-900/40 dark:text-zinc-200">
+                              Level {a.level}
+                            </Badge>
+                          ) : null}
+                          <span className="text-sm text-zinc-500 dark:text-zinc-400">
+                            Open →
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  ) : null}
-                </div>
-                <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                  View →
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
